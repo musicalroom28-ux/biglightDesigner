@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>윤광덕 | Stage Lighting Designer Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                        cinzel: ['Cinzel', 'serif'],
+                        playfair: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        stageBg: '#050505',
+                        amberGlow: '#ff9d00',
+                        cyanGlow: '#00f6ff',
+                        magentaGlow: '#ff007c',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom glow & lighting effects */
+        .glow-text {
+            text-shadow: 0 0 15px rgba(255, 157, 0, 0.6);
+        }
+        .glow-cyan-text {
+            text-shadow: 0 0 15px rgba(0, 246, 255, 0.6);
+        }
+        .stage-shadow {
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.95);
+        }
+        .spotlight-beam {
+            background: radial-gradient(circle 180px at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 80%);
+            pointer-events: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+        
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        .pulse-light {
+            animation: pulse-slow 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#050505] text-gray-200 font-sans overflow-x-hidden selection:bg-amber-500 selection:text-black">
+
+    <!-- Mouse Tracking Spotlight Haze Layer -->
+    <div id="spotlightOverlay" class="fixed inset-0 spotlight-beam z-10 transition-opacity duration-300"></div>
+
+    <!-- Header / Navigation -->
+    <header class="fixed top-0 w-full z-40 bg-black/75 backdrop-blur-md border-b border-white/5 px-4 md:px-6 py-4 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <span class="font-cinzel text-lg md:text-2xl font-bold tracking-[0.25em] text-white">BIGLIGHT</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-amberGlow animate-ping"></span>
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-8 text-sm tracking-widest text-gray-400 font-medium">
+                <a href="#about" class="hover:text-white transition-colors">ABOUT</a>
+                <a href="#history" class="hover:text-white transition-colors">CAREER</a>
+                <a href="#contact" class="hover:text-white transition-colors">CONTACT</a>
+            </nav>
+
+            <div class="flex items-center space-x-3 md:space-x-4">
+                <a href="mailto:musicalroom@kakao.com" class="text-xs md:text-sm text-amber-400 hover:text-white border border-amber-400/30 hover:border-white px-3 md:px-4 py-2 rounded-full transition-all tracking-wider font-semibold">
+                    EMAIL ME
+                </a>
+                <button id="mobileMenuBtn" class="md:hidden text-white hover:text-amber-400 focus:outline-none p-1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 bg-black/95 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center space-y-8 text-xl tracking-widest">
+        <button id="mobileCloseBtn" class="absolute top-6 right-6 text-gray-400 hover:text-white p-2">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <a href="#about" class="mobile-link hover:text-amber-400 transition-colors">ABOUT</a>
+        <a href="#history" class="mobile-link hover:text-amber-400 transition-colors">CAREER</a>
+        <a href="#contact" class="mobile-link hover:text-amber-400 transition-colors">CONTACT</a>
+    </div>
+
+    <!-- Hero / Stage Backdrop Section -->
+    <section class="relative h-screen flex flex-col justify-center items-center text-center px-4 stage-shadow overflow-hidden">
+        
+        <!-- Ambient Lighting Atmosphere Overlays -->
+        <div class="absolute inset-0 bg-gradient-to-t from-amber-950/20 via-transparent to-amber-900/15 mix-blend-screen opacity-70"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-cyan-950/0 via-cyan-950/10 to-blue-900/15 mix-blend-screen opacity-40"></div>
+
+        <!-- Geometric Light Beam Effect (Atmospheric Background) -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[320px] sm:w-[500px] h-full bg-gradient-to-b from-white/10 via-white/5 to-transparent origin-top blur-lg pointer-events-none" style="clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);"></div>
+
+        <div class="relative z-20 max-w-4xl mx-auto space-y-6">
+            <p class="text-[10px] sm:text-sm tracking-[0.4em] text-amber-400 font-bold uppercase animate-pulse">STAGE LIGHTING DESIGN PORTFOLIO</p>
+            
+            <h1 class="text-4xl sm:text-7xl md:text-8xl font-bold font-cinzel tracking-wider text-white select-none leading-tight">
+                KWANGDEOK <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-white glow-text">YOON</span>
+            </h1>
+
+            <p class="text-sm sm:text-lg md:text-xl font-light text-gray-400 max-w-xl mx-auto tracking-wide leading-relaxed font-playfair italic px-4">
+                "어둠 속에 비로소 떠오르는 무대의 영혼, 빛의 선율과 감정의 대비를 조각하다."
+            </p>
+
+            <div class="pt-6 flex flex-col sm:flex-row justify-center items-center gap-3.5 px-4 w-full sm:w-auto">
+                <a href="#history" class="w-full sm:w-auto px-8 py-3.5 bg-amber-500 text-black hover:bg-white hover:text-black font-semibold text-sm tracking-widest rounded-sm shadow-lg shadow-amber-500/20 transition-all">
+                    주요 경력 보기
+                </a>
+                <a href="#contact" class="w-full sm:w-auto px-8 py-3.5 bg-white/5 hover:bg-white/10 text-white font-semibold text-sm tracking-widest rounded-sm border border-white/10 transition-all">
+                    협업 문의하기
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 text-center animate-bounce">
+            <span class="text-[9px] tracking-[0.3em] text-gray-500 block mb-1">SCROLL DOWN</span>
+            <svg class="w-4 h-4 text-amberGlow mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 md:py-24 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-12 items-center relative">
+        <!-- Background Ambient Glow -->
+        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 rounded-full bg-amber-500/5 filter blur-3xl pointer-events-none"></div>
+
+        <!-- Left Column: The Signature Visual Card -->
+        <div class="lg:col-span-5 space-y-6 relative">
+            <div class="relative aspect-square w-full max-w-sm mx-auto bg-gradient-to-br from-neutral-900 to-[#111] border border-white/10 rounded overflow-hidden shadow-2xl flex flex-col justify-between p-6">
+                <!-- Top Header Inside Card -->
+                <div class="flex justify-between items-start">
+                    <div class="font-cinzel text-xs text-gray-500 tracking-[0.2em]">DESIGNER ARCHIVE</div>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amberGlow"></span>
+                </div>
+
+                <!-- Middle Content: Elegant BIGLIGHT Glowing Typography -->
+                <div class="relative w-full h-48 flex flex-col justify-center items-center">
+                    <div class="absolute w-32 h-32 rounded-full bg-amber-500/10 filter blur-xl animate-pulse"></div>
+                    <span class="relative font-cinzel text-4xl md:text-5xl font-black tracking-[0.15em] text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-white glow-text select-none">
+                        BIGLIGHT
+                    </span>
+                    <span class="text-[10px] text-gray-500 tracking-[0.3em] mt-3 font-mono">LIGHT ARTISTRY</span>
+                </div>
+
+                <!-- Bottom Footer Inside Card -->
+                <div class="space-y-1">
+                    <h3 class="font-cinzel text-lg text-white font-bold tracking-wider">KWANGDEOK YOON</h3>
+                    <p class="text-xs text-amber-400 font-mono">Stage Lighting Sculptor</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Personal Bio -->
+        <div class="lg:col-span-7 space-y-6">
+            <div class="space-y-2 text-center lg:text-left">
+                <span class="text-xs tracking-[0.3em] text-amber-400 font-bold uppercase">ARTISTIC PHILOSOPHY</span>
+                <h2 class="text-3xl md:text-5xl font-bold font-cinzel tracking-wider text-white">윤 광 덕 <span class="text-base md:text-xl font-sans font-light text-gray-400 tracking-normal ml-3">무대조명 디자이너</span></h2>
+            </div>
+
+            <p class="text-gray-300 leading-relaxed text-sm md:text-base font-light space-y-4 text-justify lg:text-left">
+                빛은 단순히 무대를 밝히는 수단이 아닙니다. 빛은 무대의 배우들과 호흡하며 호흡과 움직임, 침묵의 감정선까지 조각해 내는 세련된 연출적 언어입니다. 
+                <br><br>
+                극단 노뜰의 전속 디자이너를 기점으로 서울문화재단, 성북문화재단, 국립아시아문화전당 등 국내 최고의 예술 현장에서 기술감독 및 조명감독으로 굵직한 업적을 남겼습니다. 연극, 무용, 대형 클래식 및 다국적 페스티벌 등 다양한 장르를 넘나들며 <strong>1000여 작품 이상</strong>의 조명 디자인을 성공적으로 완성시켰습니다.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-white/5">
+                <div class="text-center sm:text-left">
+                    <h4 class="text-xs text-gray-500 uppercase tracking-wider font-mono">Education</h4>
+                    <ul class="text-xs md:text-sm text-gray-300 mt-2 space-y-1 font-light">
+                        <li>청주대학교 연극영화학과 졸업 (문학사)</li>
+                        <li>상명대학교 대학원 무대조명디자인 석사</li>
+                    </ul>
+                </div>
+                <div class="text-center sm:text-left">
+                    <h4 class="text-xs text-gray-500 uppercase tracking-wider font-mono">Affiliations</h4>
+                    <ul class="text-xs md:text-sm text-gray-300 mt-2 space-y-1 font-light">
+                        <li>극단 노뜰 조명디자이너</li>
+                        <li>한국영상대학교 겸임조교수</li>
+                        <li>한국문화예술위원회(아르코인력개발원) 주강사</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Milestones Timeline / History -->
+    <section id="history" class="py-24 max-w-7xl mx-auto px-6 space-y-16">
+        <div class="text-center max-w-2xl mx-auto space-y-3">
+            <span class="text-xs tracking-[0.3em] text-amber-400 font-bold uppercase">TRAJECTORY</span>
+            <h2 class="text-3xl md:text-5xl font-bold font-cinzel tracking-wider text-white">Career & Milestones</h2>
+            <p class="text-xs sm:text-sm text-gray-400">
+                수많은 국내 주요 아트센터와 극단에서 전문 감독 및 디자이너로 헌신해 왔습니다.
+            </p>
+        </div>
+
+        <!-- 3-Column Grid representing '1줄에 3군데씩 정렬' (3 items per line) with optimized font sizes -->
+        <div class="space-y-6">
+            <h3 class="font-cinzel text-xl text-white font-bold tracking-wider border-b border-white/10 pb-4 flex items-center space-x-2">
+                <span class="w-1.5 h-3 bg-amberGlow"></span>
+                <span>주요 근무 경력 (Major Roles)</span>
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-1.5 md:gap-2">
+                <!-- 1 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">극단 노뜰</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">조명디자이너</p>
+                    </div>
+                </div>
+                <!-- 2 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">한국영상대학교</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">겸임조교수</p>
+                    </div>
+                </div>
+                <!-- 3 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">서울문화재단 라이브하우스</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">조명책임감독</p>
+                    </div>
+                </div>
+                <!-- 4 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">성북문화재단 미아리고개예술극장</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">기술감독</p>
+                    </div>
+                </div>
+                <!-- 5 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">국립아시아문화전당</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">조명감독</p>
+                    </div>
+                </div>
+                <!-- 6 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">공주문화재단</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">조명감독</p>
+                    </div>
+                </div>
+                <!-- 7 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">국립아시아문화전당재단</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">기술감독</p>
+                    </div>
+                </div>
+                <!-- 8 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">국립남도국악원</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">무대계장</p>
+                    </div>
+                </div>
+                <!-- 9 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">통영국제음악당</h4>
+                        <p class="text-gray-400 text-xs md:text-xs font-light">조명감독</p>
+                    </div>
+                </div>
+                <!-- 10 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">NH아트홀</h4>
+                        <p class="text-gray-400 text-xs md:text-xs mt-0.5 font-light">무대감독</p>
+                    </div>
+                </div>
+                <!-- 11 -->
+                <div class="p-4 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">청심평화월드센터</h4>
+                        <p class="text-gray-400 text-xs md:text-xs mt-0.5 font-light">무대감독</p>
+                    </div>
+                </div>
+                <!-- 12 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">포천 반월아트홀</h4>
+                        <p class="text-gray-400 text-xs md:text-xs mt-0.5 font-light">조명감독</p>
+                    </div>
+                </div>
+                <!-- 13 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">안양아트센터</h4>
+                        <p class="text-gray-400 text-xs md:text-xs mt-0.5 font-light">조명감독</p>
+                    </div>
+                </div>
+                <!-- 14 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">극단 노뜰</h4>
+                        <p class="text-gray-400 text-xs md:text-xs mt-0.5 font-light">조명감독</p>
+                    </div>
+                </div>
+                <!-- 15 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">예술의전당</h4>
+                        <p class="text-gray-300 text-xs md:text-xs mt-0.5 font-light">조명감독</p>
+                    </div>
+                </div>
+                <!-- 16 -->
+                <div class="py-1.5 px-3 rounded bg-white/[0.02] border border-white/5 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all flex items-center space-x-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amberGlow shrink-0 animate-pulse"></span>
+                    <div>
+                        <h4 class="text-white font-bold text-sm md:text-base leading-snug">두레극장</h4>
+                        <p class="text-gray-400 text-xs md:text-xs mt-0.5 font-light">조명감독</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Festival Info (Reorganized Below Major Career Cards) -->
+        <div class="pt-8 border-t border-white/5 grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4 space-y-3 text-center lg:text-left">
+                <h3 class="font-cinzel text-lg text-white font-bold tracking-wider justify-center lg:justify-start flex items-center space-x-2">
+                    <span class="w-1.5 h-3.5 bg-amberGlow"></span>
+                    <span>글로벌 공연 축제 경력 (Festivals)</span>
+                </h3>
+                <p class="text-xs text-gray-400 leading-relaxed font-light">
+                    아시아를 넘어 유럽, 아메리카 등 해외 유수의 극장 및 공연제에 초청 및 협업 스태프로 참여하여 세련된 글로벌 조명 조류를 무대에 녹여냈습니다.
+                </p>
+            </div>
+            
+            <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-4 rounded bg-white/5 border border-white/5">
+                    <h4 class="text-xs font-bold text-white tracking-wider font-mono">ASIA REGION</h4>
+                    <ul class="text-xs text-gray-400 mt-2 space-y-1.5 font-light">
+                        <li>• 일본 도가 페스티발 참여</li>
+                        <li>• 일본 베세토 연극제 및 돗토리 BIRD 페스티발</li>
+                        <li>• 싱가포르 (Esplanade) 초청공연</li>
+                        <li>• 대만 Asia Arts Live / Kuandu Arts 페스티벌</li>
+                        <li>• 중국 동방 초청공연 및 태국/인도네시아 교류</li>
+                    </ul>
+                </div>
+
+                <div class="p-4 rounded bg-white/5 border border-white/5">
+                    <h4 class="text-xs font-bold text-white tracking-wider font-mono">EUROPE & AMERICA</h4>
+                    <ul class="text-xs text-gray-400 mt-2 space-y-1.5 font-light">
+                        <li>• 프랑스 아비뇽 페스티발 참여</li>
+                        <li>• 호주 멜버른 (Fortyfivedownstairs)</li>
+                        <li>• 멕시코 Puebla International Theatre</li>
+                        <li>• 루마니아 시비우(Sibiu) 국제연극제</li>
+                        <li>• 몰도바 비테이(BITEI) 축제 초청</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Index Quick-View (Accordion/List) -->
+    <section class="py-16 bg-[#090909] border-t border-white/5 text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-6">
+            <h3 class="font-cinzel text-sm text-gray-400 tracking-[0.2em] mb-6 uppercase text-center lg:text-left">Design Directory (1000+ Projects Index)</h3>
+            <div class="flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-3 font-light font-mono leading-relaxed text-center lg:text-left">
+                <span>뿔난 오니</span> | <span>위선의 역사</span> | <span>백일홍의 전설</span> | <span>그의 집이 있다</span> | 
+                <span>지구의 정복자</span> | <span>계단의 아이</span> | <span>울어버린 빨간 오니</span> | <span>길 위에 리어</span> | 
+                <span>TAKE OFF</span> | <span>케카이</span> | <span>미스 줄리</span> | <span>귀환</span> | 
+                <span>성스러운 불꽃</span> | <span>의자들</span> | <span>오후 다섯시</span> | <span>핑팽퐁</span> | 
+                <span>플립플립이야기</span> | <span>난 전화를 걸려고 온 것뿐이예요</span> | <span>노부인의 방문</span> | 
+                <span>타이피스트</span> | <span>카페 더 로스트</span> | <span>루나틱</span> | <span>심청가</span> | 
+                <span>까발레리아 루스티카나</span> | <span>불 좀 꺼주세요</span> | <span>웅녀</span> | <span>떳다 보아라 안창남 비행기</span> | 
+                <span>오래된 알</span> | <span>더블웨이</span> | <span>엄마의 치자꽃</span> | <span>북경 초청공연</span> | 
+                <span>존재의 욕망 그 너머</span> | <span>세월이 가면</span> | <span>아이다(AIDA)</span> | <span>춘향전</span> | 
+                <span>혈맥</span> | <span>돼지를 잡아먹은 쏘크라테스</span> | <span>에쿠우스</span> | <span>서툰 사람들</span> | 
+                <span>고도를 기다리며</span> | <span>산불</span> | <span>로미오와 줄리엣</span> | <span>엘렉트라</span> | 
+                <span>갈매기</span> | <span>칠산리</span> | <span class="text-amber-500/80">외 1000여 편</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stage Photography Gallery Section -->
+    <section id="gallery" class="py-16 max-w-7xl mx-auto px-6 relative">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/5 filter blur-3xl pointer-events-none rounded-full"></div>
+        
+        <div class="relative z-10 space-y-10">
+            <!-- Section Title -->
+            <div class="space-y-2 text-center lg:text-left">
+                <span class="text-xs tracking-[0.3em] text-amber-400 font-bold uppercase">STAGE RECORD</span>
+                <h2 class="text-2xl sm:text-3xl font-bold font-cinzel tracking-wider text-white">Stage Photography</h2>
+                <p class="text-xs sm:text-sm text-gray-400 max-w-2xl leading-relaxed">
+                    윤광덕 조명디자이너가 연출한 실제 무대의 시각적 기록입니다. 아래 사진 슬롯의 이미지 경로(<code class="text-amber-300 font-mono">src="..."</code>)를 보유하신 실제 무대 사진 파일명으로 변경하여 사용하실 수 있습니다.
+                </p>
+            </div>
+
+            <!-- Responsive 4-Column Photo Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Photo Slot 1: 보이체크 (Woyzeck) -->
+                <div class="group relative aspect-[3/4] bg-neutral-900 border border-white/5 hover:border-amber-500/40 rounded overflow-hidden shadow-2xl transition-all duration-300 flex flex-col justify-end p-5">
+                    <!-- 배경 이미지 (보유하신 이미지 파일명으로 교체하세요. 예: src="images/woyzeck.jpg") -->
+                    <img src="https://placehold.co/600x800/1f0e01/ff9d00?text=Woyzeck" alt="보이체크 조명 연출" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="relative z-10 space-y-1">
+                        <span class="text-[9px] text-amber-400 font-mono tracking-wider">SCENE 01 / THEATER</span>
+                        <h4 class="text-white font-bold text-base font-cinzel">Woyzeck (보이체크)</h4>
+                    </div>
+                </div>
+
+                <!-- Photo Slot 2: 지구의 정복자 -->
+                <div class="group relative aspect-[3/4] bg-neutral-900 border border-white/5 hover:border-amber-500/40 rounded overflow-hidden shadow-2xl transition-all duration-300 flex flex-col justify-end p-5">
+                    <!-- 배경 이미지 (보유하신 이미지 파일명으로 교체하세요. 예: src="images/conquerors.jpg") -->
+                    <img src="https://placehold.co/600x800/1a0202/ff3333?text=Conquerors" alt="지구의 정복자 조명 연출" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="relative z-10 space-y-1">
+                        <span class="text-[9px] text-amber-400 font-mono tracking-wider">SCENE 02 / THEATER</span>
+                        <h4 class="text-white font-bold text-base">지구의 정복자</h4>
+                    </div>
+                </div>
+
+                <!-- Photo Slot 3: 동방의 햄릿 -->
+                <div class="group relative aspect-[3/4] bg-neutral-900 border border-white/5 hover:border-amber-500/40 rounded overflow-hidden shadow-2xl transition-all duration-300 flex flex-col justify-end p-5">
+                    <!-- 배경 이미지 (보유하신 이미지 파일명으로 교체하세요. 예: src="images/hamlet.jpg") -->
+                    <img src="https://placehold.co/600x800/01141c/00f6ff?text=East+Hamlet" alt="동방의 햄릿 조명 연출" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="relative z-10 space-y-1">
+                        <span class="text-[9px] text-amber-400 font-mono tracking-wider">SCENE 03 / THEATER</span>
+                        <h4 class="text-white font-bold text-base font-cinzel">East Hamlet (동방의 햄릿)</h4>
+                    </div>
+                </div>
+
+                <!-- Photo Slot 4: 그의 집이 있다 -->
+                <div class="group relative aspect-[3/4] bg-neutral-900 border border-white/5 hover:border-amber-500/40 rounded overflow-hidden shadow-2xl transition-all duration-300 flex flex-col justify-end p-5">
+                    <!-- 배경 이미지 (보유하신 이미지 파일명으로 교체하세요. 예: src="images/house.jpg") -->
+                    <img src="/1.jpg" alt="그의 집이 있다 조명 연출" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="relative z-10 space-y-1">
+                        <span class="text-[9px] text-amber-400 font-mono tracking-wider">SCENE 04 / THEATER</span>
+                        <h4 class="text-white font-bold text-base">그의 집이 있다</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section (Optimized with Centered Layout, No Video) -->
+    <section id="contact" class="py-12 md:py-24 max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="bg-neutral-950 border border-white/10 rounded-lg p-8 md:p-12 shadow-2xl relative overflow-hidden text-center space-y-8">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 filter blur-3xl rounded-full pointer-events-none"></div>
+
+            <div class="space-y-3">
+                <span class="text-xs tracking-[0.3em] text-amber-400 font-bold uppercase block">COLLABORATION</span>
+                <h2 class="text-3xl md:text-4xl font-bold font-cinzel tracking-wider text-white">Let's Illuminate the Stage Together</h2>
+                <p class="text-xs md:text-sm text-gray-400 leading-relaxed font-light max-w-xl mx-auto">
+                    공연 기획, 제작 콜라보레이션, 무대조명 전문 기술 감독 및 마스터클래스 특강 문의 등 빛의 미학적 연출이 필요한 모든 협업에 대해 편하게 연락주세요.
+                </p>
+            </div>
+
+            <!-- Direct Contact Information (Better Touch Targets for Mobile) -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 pt-4 border-t border-white/5 text-sm sm:text-base font-mono">
+                <a href="tel:010-2198-4854" class="flex items-center justify-center space-x-3 text-gray-300 hover:text-amber-400 transition-colors group bg-white/5 sm:bg-transparent p-3 sm:p-0 rounded border border-white/5 sm:border-0">
+                    <svg class="w-5 h-5 text-amber-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <span class="font-bold text-white group-hover:text-amber-400 transition-colors">010-2198-4854</span>
+                </a>
+                <a href="mailto:musicalroom@kakao.com" class="flex items-center justify-center space-x-3 text-gray-300 hover:text-amber-400 transition-colors group bg-white/5 sm:bg-transparent p-3 sm:p-0 rounded border border-white/5 sm:border-0">
+                    <svg class="w-5 h-5 text-amber-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 00-2-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span class="text-white group-hover:text-amber-400 transition-colors">musicalroom@kakao.com</span>
+                </a>
+            </div>
+
+            <div class="text-[11px] text-gray-500 font-mono">
+                <span>대한민국 (전국 출장 및 해외 현지 협업 가능)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12 text-center text-[10px] text-gray-600 tracking-wider">
+        <div class="max-w-7xl mx-auto px-6 space-y-4">
+            <div class="flex justify-center space-x-6 text-xs text-gray-400">
+                <a href="#about" class="hover:text-amber-400">ABOUT</a>
+                <a href="#history" class="hover:text-amber-400">CAREER</a>
+                <a href="mailto:musicalroom@kakao.com" class="hover:text-amber-400">EMAIL</a>
+            </div>
+            <p>© 2026 KWANGDEOK YOON (BIGLIGHT). All Stage Design Intellectual Rights Reserved.</p>
+            <p class="text-[9px] text-neutral-800">Designed with Creative CSS Light Simulation in Canvas Frame.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Live Control Console System -->
+    <script>
+        // DOM Elements
+        const spotlightOverlay = document.getElementById('spotlightOverlay');
+
+        // 1. Mouse Move Spotlight Track System
+        window.addEventListener('mousemove', (e) => {
+            const xPercent = (e.clientX / window.innerWidth) * 100;
+            const yPercent = (e.clientY / window.innerHeight) * 100;
+            spotlightOverlay.style.setProperty('--x', `${xPercent}%`);
+            spotlightOverlay.style.setProperty('--y', `${yPercent}%`);
+        });
+
+        // Touch event fallback for mobile
+        window.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                const xPercent = (e.touches[0].clientX / window.innerWidth) * 100;
+                const yPercent = (e.touches[0].clientY / window.innerHeight) * 100;
+                spotlightOverlay.style.setProperty('--x', `${xPercent}%`);
+                spotlightOverlay.style.setProperty('--y', `${yPercent}%`);
+            }
+        });
+
+        // 2. Mobile Navigation menu toggler
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu(isOpen) {
+            if(isOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', () => toggleMenu(true));
+        mobileCloseBtn.addEventListener('click', () => toggleMenu(false));
+        mobileLinks.forEach(link => link.addEventListener('click', () => toggleMenu(false)));
+    </script>
+</body>
+</html>
